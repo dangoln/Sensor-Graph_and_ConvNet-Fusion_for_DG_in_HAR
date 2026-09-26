@@ -1,0 +1,701 @@
+{
+  "config": {
+    "paths": {
+      "project_path": "/content/drive/MyDrive/Thesis/SO_Experiments/DAGHAR/Project_ConvNet_DAGHAR",
+      "data_path": "/content/drive/MyDrive/HAR-Datasets/DAGHAR/standardized_view",
+      "results_dir": "results",
+      "run_name": "run2_nohann"
+    },
+    "data": {
+      "datasets": [
+        "KuHar",
+        "MotionSense",
+        "RealWorld_thigh",
+        "RealWorld_waist",
+        "UCI",
+        "WISDM"
+      ],
+      "folder_name_map": {
+        "KuHar": "KuHar",
+        "MotionSense": "MotionSense",
+        "RealWorld_thigh": "RealWorld-Thigh",
+        "RealWorld_waist": "RealWorld-Waist",
+        "UCI": "UCI",
+        "WISDM": "WISDM"
+      },
+      "channels": [
+        "accel-x",
+        "accel-y",
+        "accel-z",
+        "gyro-x",
+        "gyro-y",
+        "gyro-z"
+      ],
+      "window_size": 60,
+      "label_column": "standard activity code",
+      "input_view": "frequency",
+      "fft_drop_dc": false,
+      "fft_magnitude": "log",
+      "fft_window": "none",
+      "class_names": [
+        "sit",
+        "stand",
+        "walk",
+        "stair up",
+        "stair down",
+        "run"
+      ],
+      "num_classes": 6,
+      "normalize": "auto"
+    },
+    "model": {
+      "name": "DeepConvLSTM",
+      "in_channels": 6,
+      "num_classes": 6,
+      "window_size": 31,
+      "num_conv_layers": 4,
+      "num_filters": 64,
+      "filter_size": 5,
+      "num_lstm_layers": 2,
+      "lstm_hidden": 128,
+      "dropout": 0.5
+    },
+    "train": {
+      "optimizer": "rmsprop",
+      "learning_rate": 0.001,
+      "rho": 0.9,
+      "batch_size": 100,
+      "max_epochs": 100,
+      "early_stopping_patience": 20,
+      "model_selection_metric": "val_acc",
+      "weight_init": "orthogonal",
+      "num_workers": 2,
+      "seed": 42,
+      "device": "cuda"
+    },
+    "lodo": {
+      "source_train_split": "train",
+      "source_val_split": "validation",
+      "target_eval_split": "test",
+      "target_eval_splits": [
+        "test"
+      ]
+    }
+  },
+  "per_fold": {
+    "KuHar": {
+      "accuracy": 0.6944444444444444,
+      "f1_weighted": 0.6783663125502043,
+      "f1_macro": 0.6783663125502043,
+      "f1_per_class": [
+        0.8,
+        0.6666666666666666,
+        0.68,
+        0.5714285714285714,
+        0.5652173913043478,
+        0.7868852459016393
+      ],
+      "confusion_matrix": [
+        [
+          24,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          12,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          17,
+          1,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          9,
+          10,
+          3,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          13,
+          11
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          24
+        ]
+      ],
+      "best_epoch": 11,
+      "meta": {
+        "target": "KuHar",
+        "sources": [
+          "MotionSense",
+          "RealWorld_thigh",
+          "RealWorld_waist",
+          "UCI",
+          "WISDM"
+        ],
+        "input_view": "frequency",
+        "seq_len": 31,
+        "normalize": "zscore_feature",
+        "fft_magnitude": "log",
+        "fft_window": "none",
+        "fft_drop_dc": false,
+        "n_train": 35396,
+        "n_val": 5412,
+        "n_test": 144,
+        "train_class_counts": [
+          6709,
+          6709,
+          6709,
+          4522,
+          4522,
+          6225
+        ],
+        "test_class_counts": [
+          24,
+          24,
+          24,
+          24,
+          24,
+          24
+        ]
+      }
+    },
+    "MotionSense": {
+      "accuracy": 0.7843691148775894,
+      "f1_weighted": 0.7746726490600957,
+      "f1_macro": 0.7746726490600957,
+      "f1_per_class": [
+        0.8877005347593583,
+        0.8536585365853658,
+        0.7850467289719626,
+        0.6836363636363636,
+        0.5579937304075235,
+        0.88
+      ],
+      "confusion_matrix": [
+        [
+          166,
+          10,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          30,
+          140,
+          0,
+          0,
+          1,
+          6
+        ],
+        [
+          0,
+          0,
+          168,
+          1,
+          8,
+          0
+        ],
+        [
+          1,
+          1,
+          35,
+          94,
+          43,
+          3
+        ],
+        [
+          0,
+          0,
+          47,
+          3,
+          89,
+          38
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          176
+        ]
+      ],
+      "best_epoch": 39,
+      "meta": {
+        "target": "MotionSense",
+        "sources": [
+          "KuHar",
+          "RealWorld_thigh",
+          "RealWorld_waist",
+          "UCI",
+          "WISDM"
+        ],
+        "input_view": "frequency",
+        "seq_len": 31,
+        "normalize": "zscore_feature",
+        "fft_magnitude": "log",
+        "fft_window": "none",
+        "fft_drop_dc": false,
+        "n_train": 33230,
+        "n_val": 5424,
+        "n_test": 1062,
+        "train_class_counts": [
+          6348,
+          6348,
+          6348,
+          4161,
+          4161,
+          5864
+        ],
+        "test_class_counts": [
+          177,
+          177,
+          177,
+          177,
+          177,
+          177
+        ]
+      }
+    },
+    "RealWorld_thigh": {
+      "accuracy": 0.7322291235334714,
+      "f1_weighted": 0.7233610079978426,
+      "f1_macro": 0.7233610079978426,
+      "f1_per_class": [
+        0.7433333333333333,
+        0.5763975155279503,
+        0.7450980392156863,
+        0.8487486398258978,
+        0.5994550408719346,
+        0.8271334792122538
+      ],
+      "confusion_matrix": [
+        [
+          446,
+          24,
+          1,
+          2,
+          4,
+          6
+        ],
+        [
+          215,
+          232,
+          0,
+          2,
+          3,
+          31
+        ],
+        [
+          4,
+          4,
+          456,
+          8,
+          8,
+          3
+        ],
+        [
+          7,
+          9,
+          61,
+          390,
+          14,
+          2
+        ],
+        [
+          5,
+          7,
+          207,
+          33,
+          220,
+          11
+        ],
+        [
+          40,
+          46,
+          16,
+          1,
+          2,
+          378
+        ]
+      ],
+      "best_epoch": 32,
+      "meta": {
+        "target": "RealWorld_thigh",
+        "sources": [
+          "KuHar",
+          "MotionSense",
+          "RealWorld_waist",
+          "UCI",
+          "WISDM"
+        ],
+        "input_view": "frequency",
+        "seq_len": 31,
+        "normalize": "zscore_feature",
+        "fft_magnitude": "log",
+        "fft_window": "none",
+        "fft_drop_dc": false,
+        "n_train": 26450,
+        "n_val": 3990,
+        "n_test": 2898,
+        "train_class_counts": [
+          5218,
+          5218,
+          5218,
+          3031,
+          3031,
+          4734
+        ],
+        "test_class_counts": [
+          483,
+          483,
+          483,
+          483,
+          483,
+          483
+        ]
+      }
+    },
+    "RealWorld_waist": {
+      "accuracy": 0.6801697530864198,
+      "f1_weighted": 0.6825278375823994,
+      "f1_macro": 0.6825278375823993,
+      "f1_per_class": [
+        0.6464864864864864,
+        0.5702036441586281,
+        0.715203426124197,
+        0.7618002195389681,
+        0.6683354192740926,
+        0.7331378299120235
+      ],
+      "confusion_matrix": [
+        [
+          299,
+          131,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          165,
+          266,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          10,
+          334,
+          74,
+          10,
+          0
+        ],
+        [
+          8,
+          13,
+          46,
+          347,
+          18,
+          0
+        ],
+        [
+          9,
+          5,
+          101,
+          50,
+          267,
+          0
+        ],
+        [
+          8,
+          76,
+          18,
+          8,
+          72,
+          250
+        ]
+      ],
+      "best_epoch": 22,
+      "meta": {
+        "target": "RealWorld_waist",
+        "sources": [
+          "KuHar",
+          "MotionSense",
+          "RealWorld_thigh",
+          "UCI",
+          "WISDM"
+        ],
+        "input_view": "frequency",
+        "seq_len": 31,
+        "normalize": "zscore_feature",
+        "fft_magnitude": "log",
+        "fft_window": "none",
+        "fft_drop_dc": false,
+        "n_train": 26456,
+        "n_val": 3990,
+        "n_test": 2592,
+        "train_class_counts": [
+          5219,
+          5219,
+          5219,
+          3032,
+          3032,
+          4735
+        ],
+        "test_class_counts": [
+          432,
+          432,
+          432,
+          432,
+          432,
+          432
+        ]
+      }
+    },
+    "UCI": {
+      "accuracy": 0.7797101449275362,
+      "f1_weighted": 0.7782684863264787,
+      "f1_macro": 0.6485570719387322,
+      "f1_per_class": [
+        0.7676767676767676,
+        0.7193675889328063,
+        0.7348484848484849,
+        0.8286852589641435,
+        0.8407643312101911,
+        0.0
+      ],
+      "confusion_matrix": [
+        [
+          114,
+          24,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          45,
+          91,
+          0,
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          97,
+          3,
+          38,
+          0
+        ],
+        [
+          0,
+          0,
+          28,
+          104,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          5,
+          132,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "best_epoch": 21,
+      "meta": {
+        "target": "UCI",
+        "sources": [
+          "KuHar",
+          "MotionSense",
+          "RealWorld_thigh",
+          "RealWorld_waist",
+          "WISDM"
+        ],
+        "input_view": "frequency",
+        "seq_len": 31,
+        "normalize": "zscore_feature",
+        "fft_magnitude": "log",
+        "fft_window": "none",
+        "fft_drop_dc": false,
+        "n_train": 34368,
+        "n_val": 5504,
+        "n_test": 690,
+        "train_class_counts": [
+          6457,
+          6457,
+          6457,
+          4270,
+          4270,
+          6457
+        ],
+        "test_class_counts": [
+          138,
+          138,
+          138,
+          138,
+          138,
+          0
+        ]
+      }
+    },
+    "WISDM": {
+      "accuracy": 0.7665130568356375,
+      "f1_weighted": 0.7958305140147242,
+      "f1_macro": 0.5305536760098163,
+      "f1_per_class": [
+        0.6883018867924529,
+        0.6656200941915228,
+        0.8425681618293756,
+        0.0,
+        0.0,
+        0.9868319132455461
+      ],
+      "confusion_matrix": [
+        [
+          456,
+          189,
+          2,
+          4,
+          0,
+          0
+        ],
+        [
+          218,
+          424,
+          2,
+          4,
+          3,
+          0
+        ],
+        [
+          0,
+          10,
+          479,
+          48,
+          111,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          3,
+          8,
+          637
+        ]
+      ],
+      "best_epoch": 8,
+      "meta": {
+        "target": "WISDM",
+        "sources": [
+          "KuHar",
+          "MotionSense",
+          "RealWorld_thigh",
+          "RealWorld_waist",
+          "UCI"
+        ],
+        "input_view": "frequency",
+        "seq_len": 31,
+        "normalize": "zscore_feature",
+        "fft_magnitude": "log",
+        "fft_window": "none",
+        "fft_drop_dc": false,
+        "n_train": 28040,
+        "n_val": 4900,
+        "n_test": 2604,
+        "train_class_counts": [
+          4754,
+          4754,
+          4754,
+          4754,
+          4754,
+          4270
+        ],
+        "test_class_counts": [
+          651,
+          651,
+          651,
+          0,
+          0,
+          651
+        ]
+      }
+    }
+  },
+  "summary": {
+    "accuracy": {
+      "mean": 0.7395726062841831,
+      "std": 0.04074864775752241,
+      "min": 0.6801697530864198,
+      "max": 0.7843691148775894
+    },
+    "f1_weighted": {
+      "mean": 0.7388378012552907,
+      "std": 0.0468227662479154,
+      "min": 0.6783663125502043,
+      "max": 0.7958305140147242
+    },
+    "f1_macro": {
+      "mean": 0.673006425856515,
+      "std": 0.07514602162413979,
+      "min": 0.5305536760098163,
+      "max": 0.7746726490600957
+    }
+  }
+}

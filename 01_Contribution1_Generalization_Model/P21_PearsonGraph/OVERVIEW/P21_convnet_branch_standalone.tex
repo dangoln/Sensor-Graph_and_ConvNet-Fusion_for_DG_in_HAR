@@ -1,0 +1,110 @@
+% =====================================================================
+%  P21 — ConvNet branch (Phase 2)  ·  SELF-CONTAINED (no PlotNeuralNet)
+%  DeepConvLSTM (Ordonez & Roggen 2016) — FROZEN, reused from P18b
+% ---------------------------------------------------------------------
+%  Compiles anywhere: needs only tikz (no ./layers/ folder, no images).
+%  Compile:  pdflatex P21_convnet_branch_standalone.tex
+% =====================================================================
+\documentclass[border=15pt]{standalone}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usetikzlibrary{positioning, arrows.meta, shadows.blur}
+
+% ---- Per-component colors ------------------------------------------
+\definecolor{cInput}{RGB}{210,214,220}
+\definecolor{cConv}{RGB}{120,150,225}
+\definecolor{cReLU}{RGB}{245,180,110}
+\definecolor{cPerm}{RGB}{150,205,220}
+\definecolor{cDrop}{RGB}{235,150,150}
+\definecolor{cLSTM}{RGB}{130,200,160}
+\definecolor{cSlice}{RGB}{195,200,205}
+\definecolor{cLinear}{RGB}{240,225,130}
+\definecolor{cSoftmax}{RGB}{180,140,210}
+\definecolor{cProb}{RGB}{150,110,205}
+
+\begin{document}
+\begin{tikzpicture}[
+  >=Stealth,
+  blk/.style={draw, thick, rounded corners=1.5pt, minimum height=2.4cm,
+              align=center, font=\scriptsize, blur shadow={shadow blur steps=4}},
+  cap/.style={font=\scriptsize, align=center},
+  flow/.style={->, thick}
+]
+
+% ---- helper-free explicit layout (left -> right) -------------------
+% Input
+\node[blk, fill=cInput, minimum width=1.1cm] (input) {};
+\node[cap, above=1mm of input] {\textbf{Frequency view}\\$(B,1,31,6)$};
+\node[cap, below=1mm of input, text=orange!60!black] {FROZEN\\(from P18b)};
+
+% Conv front-end : 4 x [Conv2d | ReLU]
+\node[blk, fill=cConv,  minimum width=0.7cm, right=5mm of input] (cv1) {};
+\node[blk, fill=cReLU,  minimum width=0.32cm, right=1.2mm of cv1] (re1) {};
+\node[blk, fill=cConv,  minimum width=0.7cm, right=2.5mm of re1] (cv2) {};
+\node[blk, fill=cReLU,  minimum width=0.32cm, right=1.2mm of cv2] (re2) {};
+\node[blk, fill=cConv,  minimum width=0.7cm, right=2.5mm of re2] (cv3) {};
+\node[blk, fill=cReLU,  minimum width=0.32cm, right=1.2mm of cv3] (re3) {};
+\node[blk, fill=cConv,  minimum width=0.7cm, right=2.5mm of re3] (cv4) {};
+\node[blk, fill=cReLU,  minimum width=0.32cm, right=1.2mm of cv4] (re4) {};
+\node[cap, below=4mm of cv2.south east] {Conv2d $\times$4 (5$\times$1, 64) + ReLU\\time $31\!\to\!15$};
+
+% Permute + Flatten
+\node[blk, fill=cPerm, minimum width=1.0cm, right=5mm of re4] (perm) {};
+\node[cap, below=1mm of perm] {Permute\\+ Flatten\\$(B,15,384)$};
+
+% Dropout
+\node[blk, fill=cDrop, minimum width=0.5cm, right=4mm of perm] (dp1) {};
+\node[cap, below=1mm of dp1] {Dropout};
+
+% LSTM x2
+\node[blk, fill=cLSTM, minimum width=0.9cm, right=4mm of dp1] (ls1) {};
+\node[cap, below=1mm of ls1] {LSTM 1};
+\node[blk, fill=cLSTM, minimum width=0.9cm, right=4mm of ls1] (ls2) {};
+\node[cap, below=1mm of ls2] {LSTM 2};
+
+% Last timestep
+\node[blk, fill=cSlice, minimum width=0.9cm, right=4mm of ls2] (slice) {};
+\node[cap, below=1mm of slice] {Last\\timestep\\$(B,128)$};
+
+% Dropout
+\node[blk, fill=cDrop, minimum width=0.5cm, right=4mm of slice] (dp2) {};
+\node[cap, below=1mm of dp2] {Dropout};
+
+% Linear -> Softmax -> P_conv
+\node[blk, fill=cLinear, minimum width=0.9cm, right=4mm of dp2] (fc) {};
+\node[cap, below=1mm of fc] {Linear\\$128\!\to\!6$};
+\node[blk, fill=cSoftmax, minimum width=0.9cm, right=4mm of fc] (smax) {};
+\node[cap, below=1mm of smax] {Softmax};
+\node[blk, fill=cProb, minimum width=1.0cm, right=5mm of smax] (pconv) {};
+\node[cap, below=1mm of pconv] {P\_conv\\$[N,6]$};
+
+% ---- connections ---------------------------------------------------
+\draw[flow] (input) -- (cv1);
+\draw[flow] (re1) -- (cv2);
+\draw[flow] (re2) -- (cv3);
+\draw[flow] (re3) -- (cv4);
+\draw[flow] (re4) -- (perm);
+\draw[flow] (perm) -- (dp1);
+\draw[flow] (dp1) -- (ls1);
+\draw[flow] (ls1) -- (ls2);
+\draw[flow] (ls2) -- (slice);
+\draw[flow] (slice) -- (dp2);
+\draw[flow] (dp2) -- (fc);
+\draw[flow] (fc) -- (smax);
+\draw[flow] (smax) -- (pconv);
+
+% ---- legend --------------------------------------------------------
+\node[cap, anchor=north west, align=left] at ([yshift=-2.6cm]input.south west) {%
+\textbf{Legend:}\\[2pt]
+\tikz\fill[cConv]   (0,0) rectangle (0.32,0.32);~Conv2d (5$\times$1) \quad
+\tikz\fill[cReLU]   (0,0) rectangle (0.32,0.32);~ReLU \quad
+\tikz\fill[cPerm]   (0,0) rectangle (0.32,0.32);~Permute / Flatten \quad
+\tikz\fill[cDrop]   (0,0) rectangle (0.32,0.32);~Dropout \quad
+\tikz\fill[cLSTM]   (0,0) rectangle (0.32,0.32);~LSTM \\[3pt]
+\tikz\fill[cSlice]  (0,0) rectangle (0.32,0.32);~Last timestep \quad
+\tikz\fill[cLinear] (0,0) rectangle (0.32,0.32);~Linear \quad
+\tikz\fill[cSoftmax](0,0) rectangle (0.32,0.32);~Softmax \quad
+\tikz\fill[cProb]   (0,0) rectangle (0.32,0.32);~Output (P\_conv)};
+
+\end{tikzpicture}
+\end{document}

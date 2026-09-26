@@ -1,0 +1,165 @@
+% =====================================================================
+%  P21 — GNN branch (Phase 2)  ·  PlotNeuralNet / TikZ "Box" style
+% ---------------------------------------------------------------------
+%  Needs the PlotNeuralNet layer macros, exactly like the example:
+%      ./layers/init.sty  (provides the Box={...} pic)
+%  Compile:  pdflatex P21_gnn_branch.tex   (or lualatex)
+%
+%  Forward spine:
+%    Raw window
+%      ├─ (2A) Conv1D blk1[CNN1D|BN|ReLU] -> Conv1D blk2[CNN1D|BN|ReLU]
+%      │       -> AvgPool -> Linear -> Node emb
+%      └─ (2B) Pearson rho -> Scoring -> Top-k -> Edge_index
+%    (Node emb + Edge_index) -> GraphSAGE x2 [Dropout|SAGEConv|BN|ReLU]
+%    -> Global Mean Pool
+%      ├─ Activity Linear -> Softmax -> P_GNN
+%      └─ Domain head [GRL|Linear|ReLU|Dropout|Linear] -> Domain loss
+%  Backward: reversed gradient (GRL) feeds back to the pooled embedding.
+% =====================================================================
+\documentclass[border=15pt, multi, tikz]{standalone}
+\usepackage{import}
+\subimport{./layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d}
+
+% ---- Named colors (work in Box fill=, \draw draw=, and \textcolor) ---
+\colorlet{InputCol}{gray!20}
+\colorlet{PearsonCol}{orange!40}
+\colorlet{EdgeCol}{orange!65!yellow}
+\colorlet{ConvCol}{blue!45!white}
+\colorlet{BNCol}{teal!45!white}
+\colorlet{ReLUCol}{orange!55!white}
+\colorlet{PoolCol}{green!55!yellow}
+\colorlet{LinearCol}{yellow!55!white}
+\colorlet{DropCol}{red!30!white}
+\colorlet{SAGECol}{blue!45!cyan}
+\colorlet{GRLCol}{magenta!55!white}
+\colorlet{SoftmaxCol}{purple!55!white}
+\colorlet{ProbCol}{violet!60!white}
+\colorlet{LossCol}{gray!50}
+
+\begin{document}
+\begin{tikzpicture}
+
+% ============================ INPUT =================================
+\node[draw, thick, rounded corners, fill=InputCol,
+      minimum width=1.0cm, minimum height=2.4cm] (input) at (-9,0,0) {};
+\node[above=0.3cm of input, align=center] {\textbf{Raw window}\\\scriptsize[60 $\times$ 6]};
+
+% ===================== 2A  NODE-SIGNAL -> EMBEDDING ==================
+% --- Conv1D block 1 : CNN1D | BN | ReLU
+\pic[shift={(2.0,3.2,0)}] at (input) {Box={name=c1,caption=Conv1D blk1,%
+      fill=ConvCol,height=14,width=3,depth=14}};
+\pic at (c1-east) {Box={name=b1,fill=BNCol,height=14,width=2,depth=14}};
+\pic at (b1-east) {Box={name=r1,fill=ReLUCol,height=14,width=2,depth=14}};
+% --- Conv1D block 2 : CNN1D | BN | ReLU
+\pic[shift={(1.2,0,0)}] at (r1-east) {Box={name=c2,caption=Conv1D blk2,%
+      fill=ConvCol,height=14,width=3,depth=14}};
+\pic at (c2-east) {Box={name=b2,fill=BNCol,height=14,width=2,depth=14}};
+\pic at (b2-east) {Box={name=r2,fill=ReLUCol,height=14,width=2,depth=14}};
+% --- Adaptive Avg Pool
+\pic[shift={(1.4,0,0)}] at (r2-east) {Box={name=ap,caption=AvgPool,%
+      fill=PoolCol,height=12,width=3,depth=12}};
+% --- Linear
+\pic[shift={(1.4,0,0)}] at (ap-east) {Box={name=lin,caption=Linear,%
+      fill=LinearCol,height=12,width=3,depth=12}};
+% --- Node embeddings  (+ edge-type embed added here)
+\pic[shift={(1.4,0,0)}] at (lin-east) {Box={name=nemb,caption=Node emb,%
+      fill=LinearCol,height=10,width=3,depth=18}};
+
+% ===================== 2B  PEARSON GRAPH CONSTRUCTION ================
+\pic[shift={(2.0,-3.2,0)}] at (input) {Box={name=prho,caption=Pearson $\rho$,%
+      fill=PearsonCol,height=14,width=3,depth=14}};
+\pic[shift={(1.6,0,0)}] at (prho-east) {Box={name=score,caption=Scoring,%
+      fill=PearsonCol,height=14,width=3,depth=14}};
+\pic[shift={(1.6,0,0)}] at (score-east) {Box={name=topk,caption=Top-k,%
+      fill=PearsonCol,height=14,width=3,depth=14}};
+\pic[shift={(1.6,0,0)}] at (topk-east) {Box={name=eidx,caption=Edge\_index,%
+      fill=EdgeCol,height=10,width=3,depth=18}};
+
+% ===================== GraphSAGE MESSAGE PASSING ====================
+% layer 1 : Dropout | SAGEConv | BN | ReLU
+\pic[shift={(2.4,0,0)}] at (nemb-east) {Box={name=d1,caption=GraphSAGE $\times$2,%
+      fill=DropCol,height=16,width=2,depth=16}};
+\pic at (d1-east) {Box={name=s1,fill=SAGECol,height=16,width=3,depth=16}};
+\pic at (s1-east) {Box={name=sb1,fill=BNCol,height=16,width=2,depth=16}};
+\pic at (sb1-east){Box={name=sr1,fill=ReLUCol,height=16,width=2,depth=16}};
+% layer 2 : Dropout | SAGEConv | BN | ReLU
+\pic at (sr1-east){Box={name=d2,fill=DropCol,height=16,width=2,depth=16}};
+\pic at (d2-east) {Box={name=s2,fill=SAGECol,height=16,width=3,depth=16}};
+\pic at (s2-east) {Box={name=sb2,fill=BNCol,height=16,width=2,depth=16}};
+\pic at (sb2-east){Box={name=sr2,fill=ReLUCol,height=16,width=2,depth=16}};
+
+% ===================== GLOBAL MEAN POOL ============================
+\pic[shift={(2.0,0,0)}] at (sr2-east) {Box={name=gpool,caption=Global\\Mean Pool,%
+      fill=PoolCol,height=12,width=3,depth=12}};
+
+% ===================== ACTIVITY HEAD -> P_GNN ======================
+\pic[shift={(2.2,2.6,0)}] at (gpool-east) {Box={name=alin,caption=Activity\\Linear,%
+      fill=LinearCol,height=12,width=3,depth=12}};
+\pic[shift={(1.6,0,0)}] at (alin-east) {Box={name=smax,caption=Softmax,%
+      fill=SoftmaxCol,height=12,width=3,depth=12}};
+\pic[shift={(1.6,0,0)}] at (smax-east) {Box={name=pgnn,caption=P\_GNN,%
+      fill=ProbCol,height=10,width=3,depth=16}};
+
+% ===================== DOMAIN HEAD (DANN) ==========================
+% GRL | Linear | ReLU | Dropout | Linear
+\pic[shift={(2.2,-2.6,0)}] at (gpool-east) {Box={name=grl,caption=Domain head,%
+      fill=GRLCol,height=12,width=2,depth=12}};
+\pic at (grl-east) {Box={name=dl1,fill=LinearCol,height=12,width=3,depth=12}};
+\pic at (dl1-east) {Box={name=dre,fill=ReLUCol,height=12,width=2,depth=12}};
+\pic at (dre-east) {Box={name=ddr,fill=DropCol,height=12,width=2,depth=12}};
+\pic at (ddr-east) {Box={name=dl2,fill=LinearCol,height=12,width=3,depth=12}};
+\pic[shift={(1.6,0,0)}] at (dl2-east) {Box={name=dloss,caption=Domain\\loss,%
+      fill=LossCol,height=10,width=3,depth=10}};
+
+% ============================ CONNECTIONS ===========================
+% input -> both sub-paths
+\draw[->,thick] (input) -- (c1-west);
+\draw[->,thick] (input) -- (prho-west);
+% encoder chain
+\draw[->,thick] (r1-east)  -- (c2-west);
+\draw[->,thick] (r2-east)  -- (ap-west);
+\draw[->,thick] (ap-east)  -- (lin-west);
+\draw[->,thick] (lin-east) -- (nemb-west);
+% pearson chain
+\draw[->,thick] (prho-east)  -- (score-west);
+\draw[->,thick] (score-east) -- (topk-west);
+\draw[->,thick] (topk-east)  -- (eidx-west);
+% both inputs merge into GraphSAGE
+\draw[->,thick] (nemb-east) -- (d1-west);
+\draw[->,thick] (eidx-east) -- (d1-west);
+% graphsage -> pool
+\draw[->,thick] (sr2-east) -- (gpool-west);
+% pool -> two heads
+\draw[->,thick] (gpool-east) -- (alin-west);
+\draw[->,thick] (gpool-east) -- (grl-west);
+% activity head -> softmax -> P_GNN
+\draw[->,thick] (alin-east) -- (smax-west);
+\draw[->,thick] (smax-east) -- (pgnn-west);
+% domain head -> loss
+\draw[->,thick] (dl2-east) -- (dloss-west);
+% reversed gradient (GRL): dashed feedback from domain head to pooled emb
+\draw[->,dashed,thick,GRLCol]
+      (grl-south) .. controls +(0,-2.2) and +(0,-3.0) .. (gpool-south)
+      node[midway,below,align=center,font=\scriptsize,text=black]
+      {reversed gradient (GRL), $\times(-\lambda)$};
+
+% ============================== LEGEND ==============================
+\node[below=9cm of gpool, anchor=north, align=left] {\footnotesize\textbf{Legend:}\\[2pt]
+\textcolor{ConvCol}{\rule{0.32cm}{0.32cm}} Conv1D \quad
+\textcolor{BNCol}{\rule{0.32cm}{0.32cm}} BatchNorm \quad
+\textcolor{ReLUCol}{\rule{0.32cm}{0.32cm}} ReLU \quad
+\textcolor{PoolCol}{\rule{0.32cm}{0.32cm}} Pooling \quad
+\textcolor{LinearCol}{\rule{0.32cm}{0.32cm}} Linear \quad
+\textcolor{DropCol}{\rule{0.32cm}{0.32cm}} Dropout \\[2pt]
+\textcolor{PearsonCol}{\rule{0.32cm}{0.32cm}} Pearson stage \quad
+\textcolor{EdgeCol}{\rule{0.32cm}{0.32cm}} Edge\_index \quad
+\textcolor{SAGECol}{\rule{0.32cm}{0.32cm}} SAGEConv \quad
+\textcolor{GRLCol}{\rule{0.32cm}{0.32cm}} GRL / domain \quad
+\textcolor{SoftmaxCol}{\rule{0.32cm}{0.32cm}} Softmax \quad
+\textcolor{ProbCol}{\rule{0.32cm}{0.32cm}} P\_GNN \quad
+\textcolor{LossCol}{\rule{0.32cm}{0.32cm}} Loss};
+
+\end{tikzpicture}
+\end{document}

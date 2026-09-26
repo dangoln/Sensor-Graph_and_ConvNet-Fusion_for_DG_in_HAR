@@ -1,0 +1,119 @@
+% =====================================================================
+%  P21 — ConvNet branch (Phase 2)  ·  PlotNeuralNet / TikZ "Box" style
+%  DeepConvLSTM (Ordonez & Roggen 2016) — FROZEN, reused from P18b
+% ---------------------------------------------------------------------
+%  Needs the PlotNeuralNet layer macros (same as the GNN figure):
+%      ./layers/init.sty   (provides the Box={...} pic)
+%  Compile:  pdflatex P21_convnet_branch.tex   (or lualatex)
+%
+%  NOTE: any caption containing a comma / ] / $ must be wrapped in
+%        braces  caption={...}  or pgfkeys parses the comma as a new key.
+%
+%  Block structure (the confirmed sequence):
+%    1  Input  — frequency view (B,1,31,6)
+%    2  Conv Block 1 : Conv2D(64,5x1) | ReLU
+%    3  Conv Block 2 : Conv2D(64,5x1) | ReLU
+%    4  Conv Block 3 : Conv2D(64,5x1) | ReLU
+%    5  Conv Block 4 : Conv2D(64,5x1) | ReLU         (time 31 -> 15)
+%    6  Reshape Block : Permute | Flatten | Dropout(0.5)
+%    7  Recurrent Block : LSTM(384->128) | Dropout(0.5) | LSTM(128->128)
+%    8  Temporal Aggregation : Last timestep | Dropout(0.5)
+%    9  Linear(128->6)
+%    10 Softmax
+%    11 P_conv [N,6]
+% =====================================================================
+\documentclass[border=15pt, multi, tikz]{standalone}
+\usepackage{import}
+\subimport{./layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d}
+
+% ---- Per-component colors ------------------------------------------
+\def\InputColor{rgb:gray,2;white,8}
+\def\ConvColor{rgb:blue,5;white,5}
+\def\ReLUColor{rgb:red,7;black,2}        % dark red — distinct from Dropout
+\def\PermColor{rgb:cyan,3;white,7}
+\def\FlatColor{rgb:teal,4;white,6}
+\def\DropColor{rgb:red,2;white,8}        % light pink — distinct from ReLU
+\def\LSTMColor{rgb:green,4;teal,3;white,4}
+\def\SliceColor{rgb:gray,4;white,6}
+\def\LinearColor{rgb:yellow,5;white,5}
+\def\SoftmaxColor{rgb:purple,5;white,5}
+\def\ProbColor{rgb:violet,6;white,4}
+
+\begin{document}
+\begin{tikzpicture}
+
+% ============================ 1  INPUT ==============================
+\pic[shift={(0,0,0)}] at (0,0,0) {Box={name=input,caption={Input\\freq view\\$(B,1,31,6)$},%
+      fill=\InputColor,height=18,width=3,depth=18}};
+
+% ===================== 2  CONV BLOCK 1 : Conv2D | ReLU ==============
+\pic[shift={(2.0,0,0)}] at (input-east) {Box={name=cv1,caption=Conv Blk1,%
+      fill=\ConvColor,height=16,width=3,depth=16}};
+\pic at (cv1-east) {Box={name=re1,fill=\ReLUColor,height=16,width=2,depth=16}};
+% ===================== 3  CONV BLOCK 2 =============================
+\pic[shift={(1.2,0,0)}] at (re1-east) {Box={name=cv2,caption=Conv Blk2,%
+      fill=\ConvColor,height=15,width=3,depth=15}};
+\pic at (cv2-east) {Box={name=re2,fill=\ReLUColor,height=15,width=2,depth=15}};
+% ===================== 4  CONV BLOCK 3 =============================
+\pic[shift={(1.2,0,0)}] at (re2-east) {Box={name=cv3,caption=Conv Blk3,%
+      fill=\ConvColor,height=14,width=3,depth=14}};
+\pic at (cv3-east) {Box={name=re3,fill=\ReLUColor,height=14,width=2,depth=14}};
+% ===================== 5  CONV BLOCK 4 =============================
+\pic[shift={(1.2,0,0)}] at (re3-east) {Box={name=cv4,caption=Conv Blk4,%
+      fill=\ConvColor,height=13,width=3,depth=13}};
+\pic at (cv4-east) {Box={name=re4,fill=\ReLUColor,height=13,width=2,depth=13}};
+
+% ===================== 6  RESHAPE BLOCK : Permute|Flatten|Dropout ===
+\pic[shift={(1.8,0,0)}] at (re4-east) {Box={name=perm,caption=Reshape,%
+      fill=\PermColor,height=10,width=2,depth=20}};
+\pic at (perm-east) {Box={name=flat,fill=\FlatColor,height=10,width=2,depth=16}};
+\pic at (flat-east) {Box={name=rdrop,fill=\DropColor,height=10,width=2,depth=12}};
+
+% ===================== 7  RECURRENT BLOCK : LSTM|Dropout|LSTM =======
+\pic[shift={(1.8,0,0)}] at (rdrop-east) {Box={name=ls1,caption=Recurrent,%
+      fill=\LSTMColor,height=12,width=3,depth=16}};
+\pic at (ls1-east) {Box={name=ldrop,fill=\DropColor,height=12,width=2,depth=16}};
+\pic at (ldrop-east) {Box={name=ls2,fill=\LSTMColor,height=12,width=3,depth=16}};
+
+% ===================== 8  TEMPORAL AGGREGATION : Last step|Dropout ==
+\pic[shift={(1.8,0,0)}] at (ls2-east) {Box={name=slice,caption={Temporal\\Aggreg.},%
+      fill=\SliceColor,height=10,width=3,depth=10}};
+\pic at (slice-east) {Box={name=cdrop,fill=\DropColor,height=10,width=2,depth=10}};
+
+% ===================== 9-11  Linear -> Softmax -> P_conv ============
+\pic[shift={(1.8,0,0)}] at (cdrop-east) {Box={name=fc,caption={Linear\\$128\!\to\!6$},%
+      fill=\LinearColor,height=12,width=3,depth=12}};
+\pic[shift={(1.4,0,0)}] at (fc-east) {Box={name=smax,caption=Softmax,%
+      fill=\SoftmaxColor,height=12,width=3,depth=12}};
+\pic[shift={(1.6,0,0)}] at (smax-east) {Box={name=pconv,caption={P\_conv\\$[N,6]$},%
+      fill=\ProbColor,height=10,width=3,depth=16}};
+
+% ============================ CONNECTIONS ===========================
+\draw[->,thick] (input-east) -- (cv1-west);
+\draw[->,thick] (re1-east)   -- (cv2-west);
+\draw[->,thick] (re2-east)   -- (cv3-west);
+\draw[->,thick] (re3-east)   -- (cv4-west);
+\draw[->,thick] (re4-east)   -- (perm-west);
+\draw[->,thick] (rdrop-east) -- (ls1-west);
+\draw[->,thick] (ls2-east)   -- (slice-west);
+\draw[->,thick] (cdrop-east) -- (fc-west);
+\draw[->,thick] (fc-east)    -- (smax-west);
+\draw[->,thick] (smax-east)  -- (pconv-west);
+
+% ============================== LEGEND ==============================
+\node[below=4.5cm of ls1, anchor=north, align=left] (legend) {\footnotesize\textbf{Legend:}\\[2pt]
+\textcolor{\ConvColor}{\rule{0.32cm}{0.32cm}} Conv2D (5$\times$1) \quad
+\textcolor{\ReLUColor}{\rule{0.32cm}{0.32cm}} ReLU \quad
+\textcolor{\PermColor}{\rule{0.32cm}{0.32cm}} Permute \quad
+\textcolor{\FlatColor}{\rule{0.32cm}{0.32cm}} Flatten \quad
+\textcolor{\DropColor}{\rule{0.32cm}{0.32cm}} Dropout \quad
+\textcolor{\LSTMColor}{\rule{0.32cm}{0.32cm}} LSTM \\[3pt]
+\textcolor{\SliceColor}{\rule{0.32cm}{0.32cm}} Last timestep \quad
+\textcolor{\LinearColor}{\rule{0.32cm}{0.32cm}} Linear \quad
+\textcolor{\SoftmaxColor}{\rule{0.32cm}{0.32cm}} Softmax \quad
+\textcolor{\ProbColor}{\rule{0.32cm}{0.32cm}} Output (P\_conv)};
+
+\end{tikzpicture}
+\end{document}

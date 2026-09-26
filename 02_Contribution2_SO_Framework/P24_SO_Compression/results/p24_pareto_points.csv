@@ -1,0 +1,10 @@
+label,group,fused_acc_pct,gnn_kb,on_frontier
+no_gz,single-axis / arm,77.97,221.1,True
+full,single-axis / arm,77.96,222.2,False
+tiny,single-axis / arm,76.97,37.5,True
+aw40,single-axis / arm,76.89,222.2,False
+accel_only,single-axis / arm,76.85,221.1,False
+no_gz+AW40,combined-axis,75.81,221.1,False
+aw30,single-axis / arm,75.73,222.2,False
+no_gz+AW40+int8,combined-axis,75.55,186.7,False
+gyro_only,single-axis / arm,73.14,221.1,False

@@ -1,0 +1,321 @@
+{
+  "winner": "pearson_topk9_a0.5",
+  "seeds": [
+    1,
+    2,
+    3,
+    42,
+    5
+  ],
+  "fused_w": 0.6,
+  "per_seed": {
+    "1": {
+      "KuHar": {
+        "precision": 78.14,
+        "recall": 68.75,
+        "f1": 63.71,
+        "accuracy": 68.75,
+        "n": 144
+      },
+      "MotionSense": {
+        "precision": 88.21,
+        "recall": 88.04,
+        "f1": 87.95,
+        "accuracy": 88.04,
+        "n": 1062
+      },
+      "RealWorld-Thigh": {
+        "precision": 78.49,
+        "recall": 73.88,
+        "f1": 73.04,
+        "accuracy": 73.88,
+        "n": 2898
+      },
+      "RealWorld-Waist": {
+        "precision": 78.13,
+        "recall": 76.0,
+        "f1": 76.63,
+        "accuracy": 76.0,
+        "n": 2592
+      },
+      "UCI": {
+        "precision": 87.73,
+        "recall": 86.23,
+        "f1": 85.96,
+        "accuracy": 86.23,
+        "n": 690
+      },
+      "WISDM": {
+        "precision": 84.11,
+        "recall": 76.11,
+        "f1": 79.59,
+        "accuracy": 76.11,
+        "n": 2604
+      },
+      "OVERALL": {
+        "precision": 78.55,
+        "recall": 77.58,
+        "f1": 77.88,
+        "accuracy": 77.3
+      }
+    },
+    "2": {
+      "KuHar": {
+        "precision": 78.02,
+        "recall": 69.44,
+        "f1": 65.62,
+        "accuracy": 69.44,
+        "n": 144
+      },
+      "MotionSense": {
+        "precision": 88.18,
+        "recall": 86.82,
+        "f1": 86.56,
+        "accuracy": 86.82,
+        "n": 1062
+      },
+      "RealWorld-Thigh": {
+        "precision": 80.08,
+        "recall": 76.4,
+        "f1": 75.6,
+        "accuracy": 76.4,
+        "n": 2898
+      },
+      "RealWorld-Waist": {
+        "precision": 77.26,
+        "recall": 74.58,
+        "f1": 75.05,
+        "accuracy": 74.58,
+        "n": 2592
+      },
+      "UCI": {
+        "precision": 87.65,
+        "recall": 85.36,
+        "f1": 84.9,
+        "accuracy": 85.36,
+        "n": 690
+      },
+      "WISDM": {
+        "precision": 83.85,
+        "recall": 76.8,
+        "f1": 79.91,
+        "accuracy": 76.8,
+        "n": 2604
+      },
+      "OVERALL": {
+        "precision": 79.14,
+        "recall": 77.76,
+        "f1": 78.19,
+        "accuracy": 77.66
+      }
+    },
+    "3": {
+      "KuHar": {
+        "precision": 74.6,
+        "recall": 63.19,
+        "f1": 57.65,
+        "accuracy": 63.19,
+        "n": 144
+      },
+      "MotionSense": {
+        "precision": 90.07,
+        "recall": 89.17,
+        "f1": 89.0,
+        "accuracy": 89.17,
+        "n": 1062
+      },
+      "RealWorld-Thigh": {
+        "precision": 79.6,
+        "recall": 74.71,
+        "f1": 73.98,
+        "accuracy": 74.71,
+        "n": 2898
+      },
+      "RealWorld-Waist": {
+        "precision": 80.42,
+        "recall": 78.09,
+        "f1": 78.64,
+        "accuracy": 78.09,
+        "n": 2592
+      },
+      "UCI": {
+        "precision": 88.15,
+        "recall": 87.25,
+        "f1": 87.08,
+        "accuracy": 87.25,
+        "n": 690
+      },
+      "WISDM": {
+        "precision": 81.6,
+        "recall": 74.0,
+        "f1": 77.32,
+        "accuracy": 74.0,
+        "n": 2604
+      },
+      "OVERALL": {
+        "precision": 79.39,
+        "recall": 77.86,
+        "f1": 78.32,
+        "accuracy": 77.64
+      }
+    },
+    "42": {
+      "KuHar": {
+        "precision": 76.23,
+        "recall": 66.67,
+        "f1": 62.14,
+        "accuracy": 66.67,
+        "n": 144
+      },
+      "MotionSense": {
+        "precision": 89.31,
+        "recall": 88.79,
+        "f1": 88.77,
+        "accuracy": 88.79,
+        "n": 1062
+      },
+      "RealWorld-Thigh": {
+        "precision": 80.21,
+        "recall": 74.78,
+        "f1": 74.05,
+        "accuracy": 74.78,
+        "n": 2898
+      },
+      "RealWorld-Waist": {
+        "precision": 79.32,
+        "recall": 76.43,
+        "f1": 77.1,
+        "accuracy": 76.43,
+        "n": 2592
+      },
+      "UCI": {
+        "precision": 87.27,
+        "recall": 85.94,
+        "f1": 85.72,
+        "accuracy": 85.94,
+        "n": 690
+      },
+      "WISDM": {
+        "precision": 81.92,
+        "recall": 74.85,
+        "f1": 78.01,
+        "accuracy": 74.85,
+        "n": 2604
+      },
+      "OVERALL": {
+        "precision": 79.15,
+        "recall": 77.6,
+        "f1": 78.07,
+        "accuracy": 77.37
+      }
+    },
+    "5": {
+      "KuHar": {
+        "precision": 78.66,
+        "recall": 69.44,
+        "f1": 66.38,
+        "accuracy": 69.44,
+        "n": 144
+      },
+      "MotionSense": {
+        "precision": 84.53,
+        "recall": 82.49,
+        "f1": 82.26,
+        "accuracy": 82.49,
+        "n": 1062
+      },
+      "RealWorld-Thigh": {
+        "precision": 81.06,
+        "recall": 74.91,
+        "f1": 74.39,
+        "accuracy": 74.91,
+        "n": 2898
+      },
+      "RealWorld-Waist": {
+        "precision": 80.18,
+        "recall": 77.35,
+        "f1": 77.79,
+        "accuracy": 77.35,
+        "n": 2592
+      },
+      "UCI": {
+        "precision": 89.62,
+        "recall": 87.1,
+        "f1": 86.51,
+        "accuracy": 87.1,
+        "n": 690
+      },
+      "WISDM": {
+        "precision": 82.26,
+        "recall": 75.12,
+        "f1": 78.25,
+        "accuracy": 75.12,
+        "n": 2604
+      },
+      "OVERALL": {
+        "precision": 78.82,
+        "recall": 77.33,
+        "f1": 77.84,
+        "accuracy": 77.17
+      }
+    }
+  },
+  "seed_avg_summary": {
+    "KuHar": {
+      "acc_mean": 67.5,
+      "acc_std": 2.38,
+      "prec_mean": 77.13,
+      "rec_mean": 67.5,
+      "f1_mean": 63.1,
+      "f1_std": 3.1
+    },
+    "MotionSense": {
+      "acc_mean": 87.06,
+      "acc_std": 2.42,
+      "prec_mean": 88.06,
+      "rec_mean": 87.06,
+      "f1_mean": 86.91,
+      "f1_std": 2.48
+    },
+    "RealWorld-Thigh": {
+      "acc_mean": 74.94,
+      "acc_std": 0.82,
+      "prec_mean": 79.89,
+      "rec_mean": 74.94,
+      "f1_mean": 74.21,
+      "f1_std": 0.83
+    },
+    "RealWorld-Waist": {
+      "acc_mean": 76.49,
+      "acc_std": 1.2,
+      "prec_mean": 79.06,
+      "rec_mean": 76.49,
+      "f1_mean": 77.04,
+      "f1_std": 1.2
+    },
+    "UCI": {
+      "acc_mean": 86.38,
+      "acc_std": 0.71,
+      "prec_mean": 88.08,
+      "rec_mean": 86.38,
+      "f1_mean": 86.03,
+      "f1_std": 0.74
+    },
+    "WISDM": {
+      "acc_mean": 75.38,
+      "acc_std": 0.98,
+      "prec_mean": 82.75,
+      "rec_mean": 75.38,
+      "f1_mean": 78.62,
+      "f1_std": 0.98
+    },
+    "OVERALL": {
+      "acc_mean": 77.43,
+      "acc_std": 0.19,
+      "prec_mean": 79.01,
+      "rec_mean": 77.63,
+      "f1_mean": 78.06,
+      "f1_std": 0.18
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "fuse_w": 0.6,
+  "seed": 42,
+  "reference": "full (fp32)",
+  "points": {
+    "full  (reference, fp32)": {
+      "arm": "full",
+      "nc": null,
+      "aw": 0,
+      "int8": false,
+      "gnn_mean": 0.749022358828929,
+      "fused_mean": 0.7855905195247379,
+      "gnn_kb": 222.185546875,
+      "params": 51531,
+      "per_fold_fused": {
+        "KuHar": 0.7430555555555556,
+        "MotionSense": 0.85969868173258,
+        "RealWorld-Thigh": 0.7570738440303658,
+        "RealWorld-Waist": 0.7619598765432098,
+        "UCI": 0.8594202898550725,
+        "WISDM": 0.7323348694316436
+      },
+      "delta_fused_pp": 0.0,
+      "compression_x": 1.0
+    },
+    "no_gz+AW40  (fp32)": {
+      "arm": "full_nc-no_gz_aw40",
+      "nc": "no_gz",
+      "aw": 40,
+      "int8": false,
+      "gnn_mean": 0.6972149121225627,
+      "fused_mean": 0.7580770546972694,
+      "gnn_kb": 221.0634765625,
+      "params": 51339,
+      "per_fold_fused": {
+        "KuHar": 0.6041666666666666,
+        "MotionSense": 0.8747645951035782,
+        "RealWorld-Thigh": 0.7574189095928227,
+        "RealWorld-Waist": 0.7334104938271605,
+        "UCI": 0.8144927536231884,
+        "WISDM": 0.7642089093701997
+      },
+      "delta_fused_pp": -2.7513464827468526,
+      "compression_x": 1.0050757833448927
+    },
+    "no_gz+AW40+int8  (deployable)": {
+      "arm": "full_nc-no_gz_aw40",
+      "nc": "no_gz",
+      "aw": 40,
+      "int8": true,
+      "gnn_mean": 0.6965863363550798,
+      "fused_mean": 0.7555178287489986,
+      "gnn_kb": 186.6591796875,
+      "params": 51339,
+      "per_fold_fused": {
+        "KuHar": 0.5972222222222222,
+        "MotionSense": 0.8747645951035782,
+        "RealWorld-Thigh": 0.7567287784679089,
+        "RealWorld-Waist": 0.7326388888888888,
+        "UCI": 0.808695652173913,
+        "WISDM": 0.7630568356374808
+      },
+      "delta_fused_pp": -3.0072690775739264,
+      "compression_x": 1.1903274580279273
+    }
+  }
+}

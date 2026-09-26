@@ -1,0 +1,155 @@
+{
+  "phase": "P18b_seed_sweep",
+  "base_label": "base",
+  "aggregate": {
+    "base": {
+      "n_seeds": 3,
+      "seeds": [
+        1,
+        2,
+        42
+      ],
+      "mean": 0.7687317456115621,
+      "std": 0.010673726933786008,
+      "per_seed_mean": [
+        0.7585785808750233,
+        0.7834818797763575,
+        0.7641347761833055
+      ],
+      "best_w_per_seed": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "fold_mean": {
+        "KuHar": 0.6504629629629629,
+        "MotionSense": 0.8502824858757062,
+        "RealWorld-Thigh": 0.7568438003220613,
+        "RealWorld-Waist": 0.7512860082304527,
+        "UCI": 0.8618357487922707,
+        "WISDM": 0.7416794674859192
+      },
+      "fold_std": {
+        "KuHar": 0.031228559174148237,
+        "MotionSense": 0.002663302377350489,
+        "RealWorld-Thigh": 0.023269691495563447,
+        "RealWorld-Waist": 0.020666756446337368,
+        "UCI": 0.013612563095270886,
+        "WISDM": 0.0180786365030606
+      }
+    },
+    "coral_l0.3": {
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "mean": 0.7746968011416854,
+      "std": 0.0,
+      "per_seed_mean": [
+        0.7746968011416854
+      ],
+      "best_w_per_seed": [
+        0.6
+      ],
+      "fold_mean": {
+        "KuHar": 0.6736111111111112,
+        "MotionSense": 0.8370998116760828,
+        "RealWorld-Thigh": 0.7429261559696342,
+        "RealWorld-Waist": 0.7507716049382716,
+        "UCI": 0.8565217391304348,
+        "WISDM": 0.7872503840245776
+      },
+      "fold_std": {
+        "KuHar": 0.0,
+        "MotionSense": 0.0,
+        "RealWorld-Thigh": 0.0,
+        "RealWorld-Waist": 0.0,
+        "UCI": 0.0,
+        "WISDM": 0.0
+      }
+    },
+    "coral_l1": {
+      "n_seeds": 3,
+      "seeds": [
+        1,
+        2,
+        42
+      ],
+      "mean": 0.7566611918466329,
+      "std": 0.0038755133656536043,
+      "per_seed_mean": [
+        0.7525949218707365,
+        0.7555117976307274,
+        0.7618768560384349
+      ],
+      "best_w_per_seed": [
+        0.5,
+        0.6,
+        0.6
+      ],
+      "fold_mean": {
+        "KuHar": 0.6412037037037037,
+        "MotionSense": 0.8462021343377275,
+        "RealWorld-Thigh": 0.7507476420519898,
+        "RealWorld-Waist": 0.7454989711934156,
+        "UCI": 0.8420289855072464,
+        "WISDM": 0.7142857142857143
+      },
+      "fold_std": {
+        "KuHar": 0.01426947685872448,
+        "MotionSense": 0.006933685509847647,
+        "RealWorld-Thigh": 0.019508330393553566,
+        "RealWorld-Waist": 0.01597654974740665,
+        "UCI": 0.025626641951448974,
+        "WISDM": 0.01935676889570053
+      }
+    },
+    "coral_l3": {
+      "n_seeds": 1,
+      "seeds": [
+        42
+      ],
+      "mean": 0.7638342121506793,
+      "std": 0.0,
+      "per_seed_mean": [
+        0.7638342121506793
+      ],
+      "best_w_per_seed": [
+        0.6
+      ],
+      "fold_mean": {
+        "KuHar": 0.6527777777777778,
+        "MotionSense": 0.8408662900188324,
+        "RealWorld-Thigh": 0.7346445824706694,
+        "RealWorld-Waist": 0.7611882716049383,
+        "UCI": 0.836231884057971,
+        "WISDM": 0.7572964669738863
+      },
+      "fold_std": {
+        "KuHar": 0.0,
+        "MotionSense": 0.0,
+        "RealWorld-Thigh": 0.0,
+        "RealWorld-Waist": 0.0,
+        "UCI": 0.0,
+        "WISDM": 0.0
+      }
+    }
+  },
+  "gate": {
+    "coral_l0.3": {
+      "delta_pp": 0.5965055530123275,
+      "worst_fold_delta_pp": -1.391764435242715,
+      "keep": false
+    },
+    "coral_l3": {
+      "delta_pp": -0.48975334608828414,
+      "worst_fold_delta_pp": -2.5603864734299653,
+      "keep": false
+    },
+    "coral_l1": {
+      "delta_pp": -1.207055376492916,
+      "worst_fold_delta_pp": -2.7393753200204873,
+      "keep": false
+    }
+  }
+}
